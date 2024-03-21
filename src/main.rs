@@ -22,7 +22,7 @@ use tokio::sync::mpsc;
 use tokio::time::sleep;
 
 // Scheduler tasks
-async fn HourlyScheduler() {
+async fn hourly_scheduler() {
     loop {
         // Task to be executed every 12 hours
         println!("Scheduler running...");
@@ -46,8 +46,8 @@ async fn main() -> std::io::Result<()> {
     info!("Starting server at http://{}", address);
 
     // Start scheduler
-    let scheduler = tokio::spawn(async {
-        HourlyScheduler().await;
+    let _scheduler = tokio::spawn(async {
+        hourly_scheduler().await;
     });
 
     // Setup the background processing queue

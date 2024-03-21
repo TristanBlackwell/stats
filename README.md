@@ -14,11 +14,18 @@ Stats is a high-performance, standalone analytics provider designed for self-hos
 
 # Local development
 
+## Prerequisites
+
+- [Rust](https://www.rust-lang.org/tools/install) - V1.77>
+- [Diesel CLI](https://diesel.rs/guides/getting-started)
+
+## Steps
+
 1. Create a `.env` file following the example provided by `.env.example`. See [Configuration](#Configuration) for details on the values.
 
-2. If not already in use, install the [Diesel CLI](https://diesel.rs/guides/getting-started).
+2. Run the stored migrations: `diesel migration run`
 
-3. Run the stored migrations: `diesel migration run`
+3. For event location data you will need to add the [GeoLite2-City.mmdb](https://git.io/GeoLite2-City.mmdb) & [cities5000](ttps://github.com/PrismaPhonic/filter-cities-by-country/raw/master/cities5000.txt) files to `/data`
 
 # Getting started
 

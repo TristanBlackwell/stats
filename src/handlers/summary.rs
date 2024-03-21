@@ -1,6 +1,6 @@
 use crate::db::DbPool;
 use actix_web::{web, HttpResponse, Responder};
-use chrono::{Duration, NaiveDateTime, Utc};
+use chrono::{NaiveDateTime, TimeDelta, Utc};
 use diesel::prelude::*;
 use diesel::sql_types::{BigInt, Integer, Text, Timestamp};
 use serde::{Deserialize, Serialize};
@@ -27,7 +27,8 @@ pub struct FiveMinuteEventSummary {
 }
 
 pub async fn five_minutes(pool: web::Data<DbPool>) -> impl Responder {
-    let start_time = Utc::now().naive_utc() - Duration::days(1);
+    let start_time =
+        Utc::now().naive_utc() - TimeDelta::try_days(1).expect("Couldn't determine 1 day ago");
     let mut conn = match pool.get() {
         Ok(conn) => conn,
         Err(_) => return HttpResponse::ServiceUnavailable().json("Could not get DB connection"),
@@ -96,7 +97,8 @@ struct HourlyEventSummary {
 }
 
 pub async fn hourly(pool: web::Data<DbPool>) -> impl Responder {
-    let start_time = Utc::now().naive_utc() - Duration::days(1);
+    let start_time =
+        Utc::now().naive_utc() - TimeDelta::try_days(1).expect("Couldn't determine 1 day ago");
     let mut conn = match pool.get() {
         Ok(conn) => conn,
         Err(_) => return HttpResponse::ServiceUnavailable().json("Could not get DB connection"),
@@ -132,7 +134,8 @@ pub struct UrlEventCount {
 }
 
 pub async fn urls(pool: web::Data<DbPool>) -> impl Responder {
-    let start_time = Utc::now().naive_utc() - Duration::days(7);
+    let start_time =
+        Utc::now().naive_utc() - TimeDelta::try_days(7).expect("Couldn't determine 7 days ago");
     let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let sql = "
@@ -166,7 +169,8 @@ pub struct BrowserVisitCount {
 }
 
 pub async fn browsers(pool: web::Data<DbPool>) -> impl Responder {
-    let start_time = Utc::now().naive_utc() - Duration::days(7);
+    let start_time =
+        Utc::now().naive_utc() - TimeDelta::try_days(7).expect("Couldn't determine 7 days ago");
     let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let sql = "
@@ -203,7 +207,8 @@ pub struct OsBrowserVisitCount {
 }
 
 pub async fn os_browsers(pool: web::Data<DbPool>) -> impl Responder {
-    let start_time = Utc::now().naive_utc() - Duration::days(7);
+    let start_time =
+        Utc::now().naive_utc() - TimeDelta::try_days(7).expect("Couldn't determine 7 days ago");
     let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let sql = "
@@ -239,7 +244,8 @@ pub struct ReferrerCount {
 }
 
 pub async fn referrers(pool: web::Data<DbPool>) -> impl Responder {
-    let start_time = Utc::now().naive_utc() - Duration::days(7);
+    let start_time =
+        Utc::now().naive_utc() - TimeDelta::try_days(7).expect("Couldn't determine 7 days ago");
     let mut conn = pool.get().expect("couldn't get db connection from pool");
 
     let sql = "

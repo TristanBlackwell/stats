@@ -68,7 +68,7 @@ pub async fn record_event(
     }
 }
 
-pub async fn retrieve_events(pool: web::Data<DbPool>) -> impl Responder {
+pub async fn _retrieve_events(pool: web::Data<DbPool>) -> impl Responder {
     info!("Retrieving events");
     use crate::schema::events::dsl::*;
     let mut conn = pool.get().expect("couldn't get db connection from pool");

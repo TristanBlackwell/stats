@@ -3,7 +3,7 @@ use crate::models::{Collector, Event};
 use crate::schema::{collectors, events};
 use crate::utils::city::get_city_coordinates;
 use actix_web::{web, HttpResponse, Responder};
-use chrono::{Duration, Utc};
+use chrono::{TimeDelta, Utc};
 use diesel::prelude::*;
 use diesel::r2d2::{ConnectionManager, PooledConnection};
 use diesel::sql_types::{BigInt, Text};
@@ -64,9 +64,9 @@ pub async fn retrieve_sessions(pool: web::Data<DbPool>) -> impl Responder {
 
 #[derive(QueryableByName)]
 pub struct CityCount {
-    #[sql_type = "Text"]
+    #[diesel(sql_type = Text)]
     pub city: String,
-    #[sql_type = "BigInt"]
+    #[diesel(sql_type = BigInt)]
     pub count: i64,
 }
 
@@ -83,7 +83,8 @@ pub async fn map(pool: web::Data<DbPool>) -> impl Responder {
     let mut conn: PooledConnection<ConnectionManager<SqliteConnection>> =
         pool.get().expect("couldn't get db connection from pool");
 
-    let seven_days_ago = Utc::now().naive_utc() - Duration::days(7);
+    let seven_days_ago =
+        Utc::now().naive_utc() - TimeDelta::try_days(7).expect("Couldn't determine 7 days ago.");
 
     let query = r#"
         SELECT city, COUNT(*) as count
