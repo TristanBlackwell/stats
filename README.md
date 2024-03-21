@@ -7,9 +7,18 @@ Stats is a high-performance, standalone analytics provider designed for self-hos
 ![Stats dashboard on iPad](./preview.png)
 
 ### Key-features
+
 - Real-time analytics and dashboard
 - Lightweight and efficient, with minimal resource usage
 - Easy integration with websites, mobile apps, and other platforms
+
+# Local development
+
+1. Create a `.env` file following the example provided by `.env.example`. See [Configuration](#Configuration) for details on the values.
+
+2. If not already in use, install the [Diesel CLI](https://diesel.rs/guides/getting-started).
+
+3. Run the stored migrations: `diesel migration run`
 
 # Getting started
 
@@ -26,6 +35,7 @@ RUST_LOG=debug cargo run
 ```
 cargo build --release
 ```
+
 This will create the executable file you need in the /target/release/ folder
 
 **Embed events collector** <br/>
@@ -35,15 +45,13 @@ When you add this script to a new domain, you must add them to the `CORS_DOMAINS
 
 ```js
 <script>
-  // Stats analytics
-  var head = document.head || document.getElementsByTagName("head")[0];
-  var script = document.createElement("script");
-  script.setAttribute("src", "http://localhost:5775/stats.js"); // REPLACE WITH ACTUAL URL
+  // Stats analytics var head = document.head ||
+  document.getElementsByTagName("head")[0]; var script =
+  document.createElement("script"); script.setAttribute("src",
+  "http://localhost:5775/stats.js"); // REPLACE WITH ACTUAL URL
   script.setAttribute("onload", () => window.collectStats());
-  script.setAttribute("type", "text/javascript");
-  script.setAttribute("charset", "utf8");
-  script.setAttribute("async", "");
-  head.appendChild(script);
+  script.setAttribute("type", "text/javascript"); script.setAttribute("charset",
+  "utf8"); script.setAttribute("async", ""); head.appendChild(script);
 </script>
 ```
 
@@ -55,8 +63,8 @@ Minimum set of folders & files required to run this application.
 stats/
 ├── data/
 │ ├── GeoLite2-City.mmdb
-│ ├── cities5000.txt 
-│ └── stats.sqlite 
+│ ├── cities5000.txt
+│ └── stats.sqlite
 ├── ui/
 ├── stats // copy executable from target/release/stats
 └── .env
@@ -64,14 +72,12 @@ stats/
 
 # Configuration
 
-These options must be defined in a `.env` file before starting the server. 
+These options must be defined in a `.env` file before starting the server.
 
-|  Variable | Default  | Summary  |
-|---|---|---|
-|  APP_URL | http://localhost:5775  | Full domain you are hosting this service on  |
-|  SERVICE_PORT | 5775  | Port you want the service to be hosted from  |
-|  DATABASE_URL | /data/stats.sqlite  | Path to .sqlite file to use as database.  |
-|  CORS_DOMAINS | http://localhost:5775,https://udara.io  | Comma-separated list of allowed domains. The service will only accept analytics events from these domains.   |
-|  PROCESSING_BATCH_SIZE | 500  | Max limit for events buffer used to queue and batch analytics events for processing. When the limit is hit, new events are dropped until items are processed from the queue. |
-
-
+| Variable              | Default                                | Summary                                                                                                                                                                      |
+| --------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| APP_URL               | http://localhost:5775                  | Full domain you are hosting this service on                                                                                                                                  |
+| SERVICE_PORT          | 5775                                   | Port you want the service to be hosted from                                                                                                                                  |
+| DATABASE_URL          | /data/stats.sqlite                     | Path to .sqlite file to use as database.                                                                                                                                     |
+| CORS_DOMAINS          | http://localhost:5775,https://udara.io | Comma-separated list of allowed domains. The service will only accept analytics events from these domains.                                                                   |
+| PROCESSING_BATCH_SIZE | 500                                    | Max limit for events buffer used to queue and batch analytics events for processing. When the limit is hit, new events are dropped until items are processed from the queue. |
