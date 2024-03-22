@@ -6,7 +6,7 @@ Stats is a high-performance, standalone analytics provider designed for self-hos
 
 ![Stats dashboard on iPad](./preview.png)
 
-### Key-features
+## Key-features
 
 - Real-time analytics and dashboard
 - Lightweight and efficient, with minimal resource usage
@@ -21,21 +21,18 @@ Stats is a high-performance, standalone analytics provider designed for self-hos
 
 ## Steps
 
-1. Create a `.env` file following the example provided by `.env.example`. See [Configuration](#Configuration) for details on the values.
+1. Create a `.env` file following the example provided by `.env.example`. See [Configuration](#configuration) for details on the values.
 
 2. Run the stored migrations: `diesel migration run`
 
-3. For event location data you will need to add the [GeoLite2-City.mmdb](https://git.io/GeoLite2-City.mmdb) & [cities5000](ttps://github.com/PrismaPhonic/filter-cities-by-country/raw/master/cities5000.txt) files to `/data`
+3. For event location data you will need to add the [GeoLite2-City.mmdb](https://git.io/GeoLite2-City.mmdb) & [cities5000](ttps://github.com/PrismaPhonic/filter-cities-by-country/raw/master/cities5000.txt) files to `/data`. See [Setup](#setup) for minimal file structure.
+
+4. `cargo run`
 
 # Getting started
 
-To get started with Stats, you'll need to compile an executable for your server, run it, and host it. While this guide focuses on using Nginx as a reverse proxy, Stats is versatile enough to be deployed in various environments, including Docker containers, for enhanced portability and scalability.
+Stats is ran as an executable hosted on a server of your choice designed to for enhanced portability and scalability.
 
-**Run in development-mode**
-
-```
-RUST_LOG=debug cargo run
-```
 
 **Build production release**
 
@@ -43,12 +40,9 @@ RUST_LOG=debug cargo run
 cargo build --release
 ```
 
-This will create the executable file you need in the /target/release/ folder
+This command will create a production ready executable in the `/target/release` folder.
 
-**Embed events collector** <br/>
-You use this to automatically collect pageviews or other events triggered by calling `stats_collect('event_name', 'optinal_url_override')` from javascript once the script below is initialized.
-
-When you add this script to a new domain, you must add them to the `CORS_DOMAINS` list on the backend so the server can receive data from them.
+With the executable running at an accessible address you can collect events by embedding the associated JS script into your website. This script can be targetted at `http(s)://<ADDRESS_OF_HOSTED_STATS>/stats.js`. The below example shows how this can be embedded in the simplest form:
 
 ```js
 <script>
@@ -61,6 +55,8 @@ When you add this script to a new domain, you must add them to the `CORS_DOMAINS
   "utf8"); script.setAttribute("async", ""); head.appendChild(script);
 </script>
 ```
+
+> Be sure to add the address of the website to the `CORS_DOMAINS` variable on stats such that incoming requests are permitted.
 
 ## Setup
 
@@ -88,3 +84,17 @@ These options must be defined in a `.env` file before starting the server.
 | DATABASE_URL          | /data/stats.sqlite                     | Path to .sqlite file to use as database.                                                                                                                                     |
 | CORS_DOMAINS          | http://localhost:5775,https://udara.io | Comma-separated list of allowed domains. The service will only accept analytics events from these domains.                                                                   |
 | PROCESSING_BATCH_SIZE | 500                                    | Max limit for events buffer used to queue and batch analytics events for processing. When the limit is hit, new events are dropped until items are processed from the queue. |
+
+# Docker
+
+The contained [Dockerfile](.Dockerfile) can be used to run Stats as an image. An associated volume mount can be used to persist data across containers.
+
+1. Build the docker image: `docker build . -t stats:latest`
+
+2. Run the container: `docker run -d --name stats -p 5775:5775 stats:latest`
+
+> Assuming the `SERVICE_PORT` is set to 5775 then the above command will expose this port to it's host machine - <host>:<container>. Change this if the underlying port has been altered.
+
+3. Alternatively run with a volume (to persist data): `docker run -d --name stats -p 5775:5775 --mount source=stats,target=/app/data stats:latest`
+
+> The above command will mount a Docker volume named _stats_ to the `/app/data` directory of the container. As a result this folder, which contains the SQLite DB, will be persisted.
