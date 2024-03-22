@@ -199,7 +199,8 @@ a {
 
 #header .right .item {
   font-weight: 500;
-  color: #fff;
+  color: #000;
+  opacity: 0.6;
 }
 
 #header .right .item .number {
@@ -373,14 +374,14 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: #333;
+  background: #F6F4EE;
   overflow: hidden;
-  background: linear-gradient(to top, #222, #090909);
+  background: linear-gradient(to bottom, #F6F4EE, #e5e4de);
 }
 
 .hourly .col .future {
-  background: #111;
-  background: linear-gradient(to top, #111, #000);
+  background: #e2e0d8;
+  background: linear-gradient(to bottom, #F6F4EE, #e2e0d8);
 }
 
 .hourly .col .bar .bar-fill {
@@ -390,6 +391,8 @@ a {
 .hourly .col .hour {
   font-size: 12px;
   margin-top: 8px;
+  color: #000;
+  opacitY: 0.6;
 }
 
 .hourly .col .current {
