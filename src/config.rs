@@ -17,9 +17,11 @@ impl Config {
     pub fn new() -> Self {
         dotenv().ok();
 
+        let service_port = Self::get_env("SERVICE_PORT", "5775");
+
         Config {
-            app_url: Self::get_env("APP_URL", "127.0.0.1:8080"),
-            service_port: Self::get_env("SERVICE_PORT", "5775"),
+            app_url: Self::get_env("APP_URL", &format!("0.0.0.0:{service_port}")),
+            service_port,
             database_url: Self::get_env("DATABASE_URL", "/data/stats.sqlite"),
             cors_domains: Self::get_env_list("CORS_DOMAINS", ""),
             processing_batch_size: Self::get_env_usize("PROCESSING_BATCH_SIZE", 4),
