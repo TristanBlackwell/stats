@@ -431,7 +431,7 @@ async function renderWeeklyHeatmap() {
       const backgroundColor =
         eventCount > 0
           ? `rgba(255, 79, 51, ${Math.min(eventCount / 100, 1)})`
-          : "#222";
+          : "#e8e6df";
 
       // Add this hour's cell to the day's row
       heatmapHTML += `<div class="hour-cell" style="background-color: ${backgroundColor};" title="${days[localDayIndex]} ${localHour}:00 - ${eventCount} events"></div>`;
