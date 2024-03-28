@@ -75,12 +75,27 @@ fn generate_analytics_js(cid: &str, app_url: &str) -> String {
         await send(type, url);
     }}
 
-    window.stats_collect = stats_collect;
-    stats_collect('enter');
+	let disabled = localStorage.getItem("stats-toggle") === "true";
+	if (window.location.href.includes("\#toggle-stats")) {{
+		disabled = !disabled;
+		localStorage.setItem("stats-toggle", disabled.toString());
+		if (disabled) {{
+			alert("📼 Stats has been disabled");
+		}} else {{
+			alert("📼 Stats has been enabled");
+		}}
+	}}
 
-    window.addEventListener('load', function() {{
-        init();
-    }});
+	if (!disabled) {{
+		window.stats_collect = stats_collect;
+		stats_collect('enter');
+	
+		window.addEventListener('load', function() {{
+			init();
+		}});
+	}} else {{
+		console.log("📼 Stats disabled");
+	}}
 }})();
 "#,
         cid, app_url

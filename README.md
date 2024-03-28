@@ -73,6 +73,10 @@ stats/
 └── .env
 ```
 
+## Toggling stats
+
+The collection of events can be enabled/disabled on a browser level. Appending `#toggle-stats` to any URL of the website will enable or disabled collection. An alert will be sent to the browser informing the user of the current configuration. This is stored in local storage so is valid as long as storage is not cleaned.
+
 # Configuration
 
 These options must be defined in a `.env` file before starting the server.
