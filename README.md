@@ -97,7 +97,7 @@ The contained [Dockerfile](.Dockerfile) can be used to run Stats as an image. An
 
 2. Run the container: `docker run -d --name stats -p 5775:5775 stats:latest`
 
-> Assuming the `SERVICE_PORT` is set to 5775 then the above command will expose this port to it's host machine - <host>:<container>. Change this if the underlying port has been altered.
+> Assuming the `SERVICE_PORT` is set to 5775 then the above command will expose this port to it's host machine - <host>:<container>. Change this if the underlying port has been altered or you pass an alternative e.g. `-e SERVICE_PORT='9001'`.
 
 3. Alternatively run with a volume (to persist data): `docker run -d --name stats -p 5775:5775 --mount source=stats,target=/app/data stats:latest`
 
