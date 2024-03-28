@@ -46,10 +46,9 @@ With the executable running at an accessible address you can collect events by e
 
 ```js
 <script>
-  // Stats analytics var head = document.head ||
-  document.getElementsByTagName("head")[0]; var script =
-  document.createElement("script"); script.setAttribute("src",
-  "http://localhost:5775/stats.js"); // REPLACE WITH ACTUAL URL
+  // Stats analytics 
+  var head = document.head || document.getElementsByTagName("head")[0]; 
+  var script = document.createElement("script"); script.setAttribute("src", "http://localhost:5775/stats.js"); // REPLACE WITH ACTUAL URL
   script.setAttribute("onload", () => window.collectStats());
   script.setAttribute("type", "text/javascript"); script.setAttribute("charset",
   "utf8"); script.setAttribute("async", ""); head.appendChild(script);
