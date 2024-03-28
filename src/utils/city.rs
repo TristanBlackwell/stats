@@ -42,6 +42,9 @@ fn load_city_data<P: AsRef<Path>>(path: P) -> io::Result<HashMap<String, CityInf
     Ok(city_map)
 }
 
+/// Given the name of a city attempts to find the latitude & longitude.
+/// If a direct match is not found then the closest neighbour is identified
+/// (within reason).
 pub fn get_city_coordinates(city_name: &str) -> Option<(f64, f64)> {
     if city_name == "Unknown" {
         return None;

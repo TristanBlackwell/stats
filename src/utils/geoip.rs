@@ -2,6 +2,8 @@ use maxminddb::geoip2::City;
 use maxminddb::Reader;
 use std::net::IpAddr;
 
+/// Takes an IP address and attempts to find a matching country & city
+/// defaulting to "Unknown" if not possible.
 pub fn geoip_lookup(
     ip: &str,
     db_path: &str,

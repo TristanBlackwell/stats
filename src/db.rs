@@ -35,11 +35,12 @@ impl diesel::r2d2::CustomizeConnection<SqliteConnection, diesel::r2d2::Error>
 // Type alias for the pool type
 pub type DbPool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 
-// Function to establish a connection pool
+/// Takes the connection string stored in the environment variable `DATABASE_URL` and
+/// creates a connection pool.
 pub fn establish_connection_pool() -> DbPool {
     dotenv().ok();
 
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let database_url = env::var("DATABASE_URL").expect("'DATABASE_URL' must be set");
     let manager = ConnectionManager::<SqliteConnection>::new(database_url);
 
     r2d2::Pool::builder()
@@ -50,5 +51,5 @@ pub fn establish_connection_pool() -> DbPool {
             busy_timeout: Some(Duration::from_secs(30)),
         }))
         .build(manager)
-        .expect("Failed to create pool.")
+        .expect("Failed to create database pool.")
 }

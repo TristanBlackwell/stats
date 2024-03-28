@@ -10,7 +10,7 @@ pub fn setup_cors(cors_domains: &Vec<String>) -> Cors {
         .allowed_origin_fn(move |origin, _req_head| match origin.to_str() {
             Ok(origin_str) => allowed_domains_set.contains(origin_str),
             Err(_) => {
-                warn!("CORS blocked: Missing or invalid origin");
+                warn!("CORS blocked - Missing or invalid origin");
                 false
             }
         })

@@ -1,10 +1,16 @@
 use crate::db::DbPool;
 use crate::models::NewEvent;
 use diesel::prelude::*;
+use log::warn;
 use tokio::sync::mpsc::Receiver;
 use tokio::task;
 use tokio::time::{interval, Duration};
 
+/// Accepts incoming events from the receiver pushing them into the current
+/// batch for processing. The events batch with continue to grow to a max
+/// size of 100 or if 5 seconds pass without a new event being received.
+///
+/// Once this condition is met the events are sent to storage.
 pub async fn process_events_async(mut rx: Receiver<NewEvent>, db_pool: DbPool) {
     let batch_size = 100;
     let batch_timeout = Duration::from_secs(5);
@@ -17,6 +23,7 @@ pub async fn process_events_async(mut rx: Receiver<NewEvent>, db_pool: DbPool) {
             Some(event) = rx.recv() => {
                 batch.push(event);
                 if batch.len() >= batch_size {
+                    warn!("Events maximum batch size reached");
                     let db_pool_clone = db_pool.clone();
                     let batch_to_insert = std::mem::replace(&mut batch, Vec::new());
                     insert_batch(batch_to_insert, db_pool_clone).await;

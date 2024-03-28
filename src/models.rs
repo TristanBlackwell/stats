@@ -3,6 +3,9 @@ use chrono::NaiveDateTime;
 use diesel::{Associations, Identifiable, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
 
+/// A collector is an instance of the Stats script on a website e.g.
+/// a user visiting the site. It holds various metadata such as
+/// location information and browser details.
 #[derive(Queryable, Insertable, Identifiable, Serialize, Deserialize)]
 #[diesel(table_name = collectors)]
 pub struct Collector {
@@ -15,6 +18,11 @@ pub struct Collector {
     pub timestamp: NaiveDateTime,
 }
 
+/// An event is an action invoked by a collector. It has a name (`enter`, `exit`, `navigate`)
+/// and various metadata
+///
+/// This particular type is an event stored in the database. See `NewEvent` for
+/// an incoming event to be stored.
 #[derive(Queryable, Associations, Identifiable, Serialize, Deserialize)]
 #[diesel(belongs_to(Collector, foreign_key = collector_id))]
 #[diesel(table_name = events)]
@@ -34,6 +42,8 @@ pub struct EventRequest {
     pub collector_id: String,
 }
 
+/// This Event type is an event yet to be stored in the database. See `Event` for
+/// previously stored events.
 #[derive(Insertable, Deserialize)]
 #[diesel(table_name = events)]
 pub struct NewEvent {
