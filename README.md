@@ -87,6 +87,7 @@ These options must be defined in a `.env` file before starting the server.
 | DATABASE_URL          | /data/stats.sqlite                     | Path to .sqlite file to use as database.                                                                                                                                     |
 | CORS_DOMAINS          | http://localhost:5775,https://udara.io | Comma-separated list of allowed domains. The service will only accept analytics events from these domains.                                                                   |
 | PROCESSING_BATCH_SIZE | 500                                    | Max limit for events buffer used to queue and batch analytics events for processing. When the limit is hit, new events are dropped until items are processed from the queue. |
+| IS_DEVELOPMENT | false                                    | Whether the app is in development mode (allows localhost requests). |
 
 # Docker
 

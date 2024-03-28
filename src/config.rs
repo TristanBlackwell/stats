@@ -23,7 +23,7 @@ pub struct Config {
 // TODO: potentially replace this with arctix settings later
 impl Config {
     pub fn new() -> Self {
-        dotenv().expect("Unable to load environment variables file");
+        dotenv().ok();
 
         let service_port = Self::get_env("SERVICE_PORT", "5775");
 
