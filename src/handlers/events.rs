@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::db::DbPool;
 use crate::models::{Event, NewEvent};
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use chrono::Utc;
 use diesel::prelude::*;
 use log::info;
@@ -21,6 +21,7 @@ pub struct EventQuery {
 }
 
 pub async fn record_event(
+    req: HttpRequest,
     config: web::Data<Arc<Config>>,
     events_queue: web::Data<Sender<NewEvent>>,
     item: web::Query<EventQuery>,
@@ -34,6 +35,19 @@ pub async fn record_event(
     if !config.is_development && localhost_regex.is_match(&item.url) {
         return HttpResponse::BadRequest().finish();
     }
+
+    if let Some(user_agent_header) = req.headers().get("User-Agent") {
+        if let Ok(ua_string) = user_agent_header.to_str() {
+            let ua_string_lower = ua_string.to_lowercase();
+            if ua_string_lower.contains("bot")
+                || ua_string_lower.contains("crawl")
+                || ua_string_lower.contains("spider")
+            {
+                println!("Bot agent detected. Event refused.");
+                return HttpResponse::BadRequest().json("Event unrecorded");
+            }
+        }
+    };
 
     // Remove query parameters from the URL and trailing slashes
     let clean_url = match Url::parse(&item.url) {

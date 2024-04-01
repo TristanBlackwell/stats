@@ -151,8 +151,8 @@ pub async fn serve_collector_js(
     let mut os: Option<String> = None;
     let mut browser: Option<String> = None;
 
-    if let Some(user_agent_string) = req.headers().get("User-Agent") {
-        if let Ok(ua_string) = user_agent_string.to_str() {
+    if let Some(user_agent_header) = req.headers().get("User-Agent") {
+        if let Ok(ua_string) = user_agent_header.to_str() {
             let parser = Parser::new();
             let result = parser.parse(ua_string);
             if let Some(ref parsed_result) = result {
