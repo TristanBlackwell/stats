@@ -303,7 +303,7 @@ a {
 }
 
 .session .top .right .duration .item b {
-  color: #000;
+  color: #ddd;
   opacity: 0.9;
   font-weight: 400;
   margin-left: 1px;
@@ -595,4 +595,21 @@ a {
 
 .footer img {
   margin-right: 10px;
+}
+
+@media only screen and (max-width: 1700px) {
+	.overview {
+		display: flex;
+		flex-direction: column;
+		}
+}
+
+@media only screen and (max-width: 1300px) {
+	#charts {
+		flex-direction: column;
+	  }
+
+	  #weekly .hour-cell {
+		flex: 1 0 10px;
+	  }
 }
